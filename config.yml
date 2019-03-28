@@ -1,0 +1,35 @@
+#
+# ██╗███████╗ ██████╗██████╗  █████╗ ███╗   ███╗██████╗ ██╗     ███████╗
+# ██║██╔════╝██╔════╝██╔══██╗██╔══██╗████╗ ████║██╔══██╗██║     ██╔════╝
+# ██║███████╗██║     ██████╔╝███████║██╔████╔██║██████╔╝██║     █████╗  
+# ██║╚════██║██║     ██╔══██╗██╔══██║██║╚██╔╝██║██╔══██╗██║     ██╔══╝  
+# ██║███████║╚██████╗██║  ██║██║  ██║██║ ╚═╝ ██║██████╔╝███████╗███████╗
+# ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═════╝ ╚══════╝╚══════╝
+#
+# Delay between games.
+# Must be a number between 30 and 3600 (seconds).
+# NOTE: This counter does not start until the game has ENDED.
+delay: 60
+
+# Set the message shown in chat when a game is started.
+# Placeholders:
+# %word% - Word to unscramble.
+message: '&8[&e&liScramble&8] &6Try to unscramble this word for a reward: &e%word%&6!'
+
+# The message that is shown when nobody answered within 30 seconds.
+# %word% - The correct word.
+noAnswerMessage: '&8[&e&liScramble&8] &6Nobody answered. The correct answer was &e%word%&6!'
+
+# The message to inform players that someone won!
+# Placeholders:
+# %player% - The name of the player that won.
+# %word% - The correct word.
+# %seconds% - The amount of seconds it took the player to unscramble the world. (eg. 6.2 seconds)
+winMessage: '&8[&e&liScramble&8] &6&e%player% &6unscrambled the word &e%word% &6in &e%seconds% seconds&6!'
+
+# Set the reward(s) a player will get when they enter the correct answer.
+# Placeholders:
+# %player% - Player name.
+rewards:
+  - give %player% diamond 5
+  - give %player% emerald_block 10
