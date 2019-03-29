@@ -6,8 +6,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
@@ -52,12 +54,23 @@ public class iScramble extends JavaPlugin implements Listener {
 			logger.warning("ERROR: The word list cannot be empty.");
 			getServer().getPluginManager().disablePlugin(this);
 		}
+		int wordcount = wordList.getStringList("words").size();
+		if(wordcount == 1) {
+			logger.info("Loaded 1 word.");
+		}else {
+			logger.info("Loaded "+wordcount+" words.");
+		}
 		
 		// Enable Metrics
 		bstats = new Metrics(this);
 		
 		// bStats custom Charts
-		// TODO!
+		bstats.addCustomChart(new Metrics.SingleLineChart("words", new Callable<Integer>() {
+			@Override
+			public Integer call() throws Exception {
+				return wordList.getStringList("words").size();
+			}
+		}));
 		
 		// Register events
 		getServer().getPluginManager().registerEvents(this, this);
@@ -97,9 +110,16 @@ public class iScramble extends JavaPlugin implements Listener {
                 		
                 		unscrambledWord = wordList.getStringList("words").get(rand.nextInt(wordList.getStringList("words").size()));
                 		
+                		int i = 0;
+                		String[] scrambled = new String[unscrambledWord.split(" ").length];
+                		for(String word : unscrambledWord.split(" ")) {
+                			scrambled[i] = getScrambled(word);
+                			i++;
+                		}
+                		
                 		String msg = pluginConfig.getString("message");
                 		msg = ChatColor.translateAlternateColorCodes('&', msg);
-                		msg = msg.replaceAll("%word%", getScrambled(unscrambledWord));
+                		msg = msg.replaceAll("%word%", StringUtils.join(scrambled, " "));
                 		
                 		Bukkit.broadcastMessage(msg);
                 		
@@ -121,9 +141,10 @@ public class iScramble extends JavaPlugin implements Listener {
 		// Cancel the event so we can display our own message.
 		e.setCancelled(true);
 		
-		// Reset the "lastGame" value.
+		// Reset the "lastGame" & gameRunning value.
 		long currentTime = System.currentTimeMillis() / 100L;
 		lastGame = currentTime;
+		gameRunning = false;
 		
 		long timeItTook = (currentTime-startTime) / 10;
 		
@@ -134,7 +155,6 @@ public class iScramble extends JavaPlugin implements Listener {
 		msg = msg.replaceAll("%word%", unscrambledWord);
 		
 		Bukkit.broadcastMessage(msg);
-		gameRunning = false;
 		
 		// We have to run the commands synchronous.
 		BukkitScheduler scheduler = getServer().getScheduler();
