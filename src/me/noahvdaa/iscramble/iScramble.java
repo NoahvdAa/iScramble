@@ -65,7 +65,7 @@ public class iScramble extends JavaPlugin implements Listener {
 		bstats = new Metrics(this);
 		
 		// bStats custom Charts
-		bstats.addCustomChart(new Metrics.SingleLineChart("words", new Callable<Integer>() {
+		bstats.addCustomChart(new Metrics.SingleLineChart("word_count", new Callable<Integer>() {
 			@Override
 			public Integer call() throws Exception {
 				return wordList.getStringList("words").size();
